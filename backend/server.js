@@ -3,16 +3,19 @@ const dotenv = require("dotenv");
 const { chats } = require("./data/data");
 dotenv.config()
 const app = express();
+const cors = require('cors')
+
+app.use(cors()) // Use this after the variable declaration
 
 app.get("/", (req, res) => {
     res.send("API is live")
 })
 
-app.get("/chats", (req, res) => {
+app.get("/api/chats", (req, res) => {
     res.send(chats);
 })
 
-app.get("/chats/:id", (req, res) => {
+app.get("/api/chats/:id", (req, res) => {
     const chat = chats.find((chat) => chat._id === req.params.id);
     if (!chat) {
         const err = new Error("Chat is invalid");
