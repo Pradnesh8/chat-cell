@@ -37,6 +37,12 @@ const Login = () => {
             <Button width={"100%"} colorScheme="messenger" onClick={loginHandler} style={{ marginTop: "1rem" }}>
                 Login
             </Button>
+            <Button width={"100%"} variant="solid" colorScheme="red" onClick={() => {
+                setEmail("guest@gmail.com");
+                setPassword("pass1234");
+            }} style={{ marginTop: "0.5rem" }}>
+                Get Guest User Credentials
+            </Button>
         </VStack>
     )
 }
