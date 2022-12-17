@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const generateToken = require('../config/generateToken');
 const User = require("../models/userModel");
+
+// POST /api/user
 const registerUser = asyncHandler(async (req, res) => {
     const { email, name, password, pic } = req.body;
     if (!email || !name || !password) {
@@ -31,6 +33,19 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 });
 
+// GET /api/user?search=<user>
+const allUsers = asyncHandler(async (req, res) => {
+    const keyword = req.query.search ? {
+        $or: [
+            { name: { $regex: req.query.search, $options: 'i' } },
+            { email: { $regex: req.query.search, $options: 'i' } }
+        ]
+    } : {};
+    const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+    res.send(users);
+})
+
+// POST /api/user/login
 const authUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
@@ -49,4 +64,6 @@ const authUser = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { registerUser, authUser }
+
+
+module.exports = { registerUser, authUser, allUsers }
